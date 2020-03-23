@@ -20,7 +20,8 @@ public class DailyReportServlet extends HttpServlet {
 
         if (req.getPathInfo().contains("all")) {
             try {
-                json = gson.toJson(DailyReportService.getInstance().getAllDailyReports());
+                DailyReportService dailyReportServiceInstance =DailyReportService.getInstance();
+                json = gson.toJson(dailyReportServiceInstance.getAllDailyReports());
                 resp.getWriter().write(json);
                 resp.setStatus(HttpStatus.OK_200);
             } catch (DBException e) {
@@ -28,7 +29,8 @@ public class DailyReportServlet extends HttpServlet {
             }
         } else if (req.getPathInfo().contains("last")) {
             try {
-                json = gson.toJson(DailyReportService.getInstance().getLastReport());
+                DailyReportService dailyReportServiceInstance =DailyReportService.getInstance();
+                json = gson.toJson(dailyReportServiceInstance.getLastReport());
                 resp.getWriter().write(json);
                 resp.setStatus(HttpStatus.OK_200);
             } catch (DBException e) {

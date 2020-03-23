@@ -15,7 +15,8 @@ public class NewDayServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			if (DailyReportService.getInstance().addNewDaily()){
+			DailyReportService dailyReportServiceInstance = DailyReportService.getInstance();
+			if (dailyReportServiceInstance.addNewDaily()){
 				resp.setStatus(HttpStatus.OK_200);
 			} else {
 				resp.setStatus(HttpStatus.FORBIDDEN_403);

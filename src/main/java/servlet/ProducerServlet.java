@@ -24,8 +24,9 @@ public class ProducerServlet extends HttpServlet {
         boolean flag = false;
 
         try {
-            flag = CarService.getInstance().addCar(brand, model, licensePlate, Long.valueOf(price));
-            if (flag) {
+
+            CarService carServiceInstance = CarService.getInstance();
+            if (carServiceInstance.addCar(brand, model, licensePlate, Long.valueOf(price))) {
                 resp.setStatus(HttpStatus.OK_200);
             } else {
                 resp.setStatus(HttpStatus.FORBIDDEN_403);

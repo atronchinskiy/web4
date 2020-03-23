@@ -19,7 +19,8 @@ public class CustomerServlet extends HttpServlet {
         Gson gson = new Gson();
         String json = null;
         try {
-            json = gson.toJson(CarService.getInstance().getAllCars());
+            CarService carServiceInstance = CarService.getInstance();
+            json = gson.toJson(carServiceInstance.getAllCars());
         } catch (DBException e) {
             e.printStackTrace();
         }
