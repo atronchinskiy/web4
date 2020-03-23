@@ -45,8 +45,13 @@ public class DailyReportService {
     }
 
     public boolean addSaleInDailyReport (Car car) throws DBException {
+        boolean flag = false;
         try {
-            return new DailyReportDao(sessionFactory.openSession()).addSaleInDailyReport(car);
+            if (new DailyReportDao(sessionFactory.openSession()).addSaleInDailyReport(car) &
+                    new DailyReportDao(sessionFactory.openSession()).deleteSoldCar(car)) {
+                flag = true;
+            }
+            return flag;
         }catch (HibernateException e) {
             throw new DBException(e);
         }

@@ -35,6 +35,32 @@ public class DailyReportDao {
         }
     }
 
+    public boolean deleteSoldCar (Car car) {
+        String queryStr;
+        boolean flag = false;
+        Transaction transaction = null;
+
+        try {
+            Query qDel = session.createQuery("DELETE Car WHERE brand = :br AND model = :md AND licensePlate = :lp");
+            qDel.setParameter("br", car.getBrand())
+                    .setParameter("md", car.getModel())
+                    .setParameter("lp", car.getLicensePlate());
+            qDel.executeUpdate();
+            flag = true;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            try {
+                session.close();
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            }
+            return flag;
+        }
+    }
+
     public boolean addSaleInDailyReport(Car car) {
         String queryStr;
         boolean flag = false;
@@ -43,7 +69,7 @@ public class DailyReportDao {
         try {
             transaction = session.beginTransaction();
 
-            //check active day
+//check active day
             List<DailyReport> res = session.createQuery("FROM DailyReport").list();
             if (res.isEmpty()) {
                 session.save(new DailyReport(Long.valueOf(0), Long.valueOf(0)));
@@ -52,13 +78,6 @@ public class DailyReportDao {
 //      return max id
             List<DailyReport> listDailyReport = session.createQuery("FROM DailyReport AS t ORDER BY t.id DESC").list();
             DailyReport currentDailyReport = listDailyReport.get(0);
-
-//      delete sold car from BD
-            Query qDel = session.createQuery("DELETE Car WHERE brand = :br AND model = :md AND licensePlate = :lp");
-            qDel.setParameter("br", car.getBrand())
-                .setParameter("md", car.getModel())
-                .setParameter("lp", car.getLicensePlate());
-            qDel.executeUpdate();
 
 //      update max id (for current DailyReport)
             Query qUpd = session.createQuery("UPDATE DailyReport SET earnings = :earn, soldCars = :sold WHERE id = :idParam");
@@ -76,7 +95,7 @@ public class DailyReportDao {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return flag;//!res.isEmpty();
+            return flag;
         }
     }
 
@@ -109,14 +128,6 @@ public class DailyReportDao {
 
         try {
             transaction = session.beginTransaction();
-
-//            //check active day
-//            List<DailyReport> res = session.createQuery("FROM DailyReport").list();
-//            if (res.isEmpty()) {
-//                session.save(new DailyReport(Long.valueOf(0), Long.valueOf(0)));
-//            }
-
-            //      return max id
             List<DailyReport> listDailyReport = session.createQuery("FROM DailyReport AS t ORDER BY t.id DESC").list();
             currentDailyReport = listDailyReport.get(1);
             transaction.commit();
