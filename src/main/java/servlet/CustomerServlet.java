@@ -37,7 +37,8 @@ public class CustomerServlet extends HttpServlet {
         Car car = null;
 
         try {
-            car = CarService.carInstance.getAvailableCar(brand, model, licensePlate);
+            CarService carServiceInstance = CarService.getInstance();
+            car = carServiceInstance.getAvailableCar(brand, model, licensePlate);
 
     //delete sold car and update daily report
             if (car != null) {

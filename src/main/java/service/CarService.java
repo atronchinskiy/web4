@@ -14,15 +14,9 @@ import java.util.List;
 
 public class CarService {
 
-    {
-        carInstance = getInstance();
-    }
-
     private static CarService carService;
 
     private SessionFactory sessionFactory;
-
-    public static CarService carInstance;
 
     private CarService(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
